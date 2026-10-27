@@ -1,0 +1,2 @@
+# Keep LF even in a Windows checkout, like gofmt writes it.
+* text=auto eol=lf

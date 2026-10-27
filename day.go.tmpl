@@ -1,0 +1,72 @@
+// Day {{.Day}}{{with .Title}}: {{.}}{{end}}
+//
+// The input is ...
+//
+// Part 1 ...
+// Part 2 ...
+package main
+
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strings"
+)
+
+// Limits on the puzzle input, so that every loop over it has a fixed bound.
+const (
+	inputPath     = "inputs/{{.Day}}.txt"
+	maxInputBytes = 1 << 20
+	maxLines      = 50_000
+)
+
+// readLines returns the lines of the input file, which must hold between 1 and
+// maxInputBytes bytes and at most maxLines lines.
+func readLines(path string) ([]string, error) {
+	if path == "" {
+		return nil, errors.New("no input path given")
+	}
+	content, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	if len(content) == 0 || len(content) > maxInputBytes {
+		return nil, fmt.Errorf("%s: size %d is outside 1..%d bytes", path, len(content), maxInputBytes)
+	}
+	lines := strings.Split(strings.TrimRight(string(content), "\r\n"), "\n")
+	if len(lines) > maxLines {
+		return nil, fmt.Errorf("%s: %d lines, more than the %d allowed", path, len(lines), maxLines)
+	}
+	return lines, nil
+}
+
+func day{{.Day}}(path string) error {
+	lines, err := readLines(path)
+	if err != nil {
+		return err
+	}
+
+	part1, part2 := 0, 0
+	for _, line := range lines {
+		if line == "" {
+			continue
+		}
+	}
+
+	if _, err := fmt.Printf("Part 1: %d\nPart 2: %d\n", part1, part2); err != nil {
+		return err
+	}
+	return nil
+}
+
+func main() {
+	path := inputPath
+	if len(os.Args) > 1 {
+		path = os.Args[1] // another input, such as an example from the puzzle
+	}
+	if err := day{{.Day}}(path); err != nil {
+		// Nothing more can be done if writing to stderr fails too.
+		_, _ = fmt.Fprintln(os.Stderr, "error:", err)
+		os.Exit(1)
+	}
+}
